@@ -3,7 +3,6 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -30,6 +29,10 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="Qch-bV-6N4"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="NfP-p2-4ES"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -43,7 +46,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="To Do List" id="XF6-Zc-yjI">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="TfX-Wu-ywR">
-                            <color key="tintColor" name="AccentColor"/>
+                            <color key="tintColor" systemColor="linkColor"/>
                             <connections>
                                 <action selector="AddButton:" destination="BYZ-38-t0r" id="GSd-pt-CAE"/>
                             </connections>
@@ -80,9 +83,9 @@
         </scene>
     </scenes>
     <resources>
-        <namedColor name="AccentColor">
-            <color red="0.99999979239742776" green="0.31041701959103957" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="linkColor">
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

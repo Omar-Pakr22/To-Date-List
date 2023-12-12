@@ -18,6 +18,10 @@ class ViewController: UIViewController {
        
         tableView.delegate = self
         tableView.dataSource = self
+        
+        if let savedItems = UserDefaults.standard.stringArray(forKey: "todoItems") {
+                    items = savedItems
+                }
     }
 
     @IBAction func AddButton(_ sender: UIBarButtonItem) {
@@ -33,6 +37,7 @@ class ViewController: UIViewController {
         let save = UIAlertAction(title: "Save", style: .default) { (save) in
             
             self.items.append(textField.text!)
+            self.saveItemsToUserDefaults()
             self.tableView.reloadData()
             
              
@@ -47,8 +52,13 @@ class ViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
         
     }
+    private func saveItemsToUserDefaults() {
+            UserDefaults.standard.set(items, forKey: "todoItems")
+        }
     
 }
+
+
 
 extension ViewController : UITableViewDelegate , UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -62,4 +72,17 @@ extension ViewController : UITableViewDelegate , UITableViewDataSource {
         cell.textLabel?.text = items[indexPath.row]
               return cell
     }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        tableView.beginUpdates()
+        items.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .fade)
+        tableView.endUpdates()
+         
+    }
+    
 }
