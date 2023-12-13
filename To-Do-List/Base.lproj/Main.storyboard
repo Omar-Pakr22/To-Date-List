@@ -16,17 +16,35 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="SbV-uJ-6ef">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="SbV-uJ-6ef">
                                 <rect key="frame" x="0.0" y="103" width="393" height="715"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" id="thM-vX-T4n">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="47.666667938232422"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="toDoListCell" rowHeight="69" id="thM-vX-T4n" customClass="CustomTableViewCell" customModule="To_Do_List" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="69"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="thM-vX-T4n" id="fUs-cO-MEl">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="47.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="69"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hqs-86-4Py">
+                                                    <rect key="frame" x="42" y="24" width="190" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Hqs-86-4Py" secondAttribute="trailing" constant="141" id="4OH-4Q-76x"/>
+                                                <constraint firstItem="Hqs-86-4Py" firstAttribute="top" secondItem="fUs-cO-MEl" secondAttribute="topMargin" constant="12" id="NhP-1C-b6J"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Hqs-86-4Py" secondAttribute="bottom" constant="12" id="dXi-uK-JyX"/>
+                                                <constraint firstItem="Hqs-86-4Py" firstAttribute="leading" secondItem="fUs-cO-MEl" secondAttribute="leadingMargin" constant="22" id="gKS-BM-QVI"/>
+                                            </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="toDoLabel" destination="Hqs-86-4Py" id="woM-8O-wNn"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -37,12 +55,6 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="SbV-uJ-6ef" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="3XK-d1-u4A"/>
-                            <constraint firstItem="SbV-uJ-6ef" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="kbM-YB-ly3"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="SbV-uJ-6ef" secondAttribute="bottom" id="mKL-aG-N62"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="SbV-uJ-6ef" secondAttribute="trailing" id="qF1-fO-SHr"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="To Do List" id="XF6-Zc-yjI">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="TfX-Wu-ywR">
@@ -84,7 +96,7 @@
     </scenes>
     <resources>
         <systemColor name="linkColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
