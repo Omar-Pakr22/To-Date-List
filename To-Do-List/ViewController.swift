@@ -15,31 +15,34 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       initTools()
+        initTools()
+        checkisEmpty()
         
-      func isTableViewEmpty() -> Bool {
-            return tableView.numberOfSections == 0 || tableView.numberOfRows(inSection: 0) == 0
-        }
         
-        if isTableViewEmpty() {
-            
-            let imageError = UIImageView(frame: CGRect(x: 50, y: 100, width:
-            self.view.frame.width - 100, height: 200))
-            imageError.image = UIImage(systemName: "clear")
-            imageError.tintColor = UIColor(red: 69/255, green: 230/255, blue: 72/255, alpha: 1)
-            self.view.addSubview(imageError)
-            let labelMsg = UILabel(frame: CGRect(x: imageError.frame.minX, y:
-            imageError.frame.maxY + 15, width: imageError.frame.width, height:
-            30))
-            labelMsg.text =
-            "Add new item"
-            labelMsg.textAlignment = .center
-            self.view.addSubview(labelMsg)
+    }
     
-            }
+    func isTableViewEmpty() -> Bool {
+        return tableView.numberOfSections == 0 || tableView.numberOfRows(inSection: 0) == 0
+    }
+    
+    func checkisEmpty() { 
+        if isTableViewEmpty() {
         
+        let imageError = UIImageView(frame: CGRect(x: 50, y: 100, width:
+                                                    self.view.frame.width - 100, height: 200))
+        imageError.image = UIImage(systemName: "clear")
+        imageError.tintColor = UIColor(red: 69/255, green: 230/255, blue: 72/255, alpha: 1)
+        self.view.addSubview(imageError)
+        let labelMsg = UILabel(frame: CGRect(x: imageError.frame.minX, y:
+                                                imageError.frame.maxY + 15, width: imageError.frame.width, height:
+                                                30))
+        labelMsg.text =
+        "Add new item"
+        labelMsg.textAlignment = .center
+        self.view.addSubview(labelMsg)
         
-       
+    }
+        
     }
     
     private func initTools(){
@@ -50,7 +53,7 @@ class ViewController: UIViewController {
             items = savedItems
         }
     }
-
+    
     @IBAction func AddButton(_ sender: UIBarButtonItem) {
         
         var textField = UITextField()
@@ -58,7 +61,7 @@ class ViewController: UIViewController {
         let alert = UIAlertController(title: "Add New item", message: "", preferredStyle: .alert)
         
         let cancel = UIAlertAction(title: "Cancel", style: .default) { (cancel) in
-             
+            
         }
         
         let save = UIAlertAction(title: "Save", style: .default) { (save) in
@@ -67,7 +70,9 @@ class ViewController: UIViewController {
             self.saveItemsToUserDefaults()
             self.tableView.reloadData()
             
-             
+            
+            
+            
         }
         alert.addTextField { (text) in
             textField = text
@@ -80,8 +85,8 @@ class ViewController: UIViewController {
         
     }
     private func saveItemsToUserDefaults() {
-            UserDefaults.standard.set(items, forKey: "todoItems")
-        }
+        UserDefaults.standard.set(items, forKey: "todoItems")
+    }
     
 }
 
@@ -93,18 +98,18 @@ extension ViewController : UITableViewDelegate , UITableViewDataSource {
         return items.count
     }
     
-   
-
+    
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "toDoListCell", for: indexPath) as! CustomTableViewCell
         cell.toDoLabel.text = items[indexPath.row]
         
         
-              return cell
+        return cell
     }
     
-   
+    
     
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -114,6 +119,7 @@ extension ViewController : UITableViewDelegate , UITableViewDataSource {
             tableView.deleteRows(at: [indexPath], with: .automatic)
             self.saveItemsToUserDefaults()
             completion(true)
+            self.checkisEmpty()
         }
         deleteAction.image = UIImage(systemName: "trash")
         deleteAction.backgroundColor = .systemRed
