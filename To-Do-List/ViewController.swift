@@ -13,37 +13,17 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var emptyView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initTools()
-        checkisEmpty()
+       
         
         
     }
     
-    func isTableViewEmpty() -> Bool {
-        return tableView.numberOfSections == 0 || tableView.numberOfRows(inSection: 0) == 0
-    }
-    
-    func checkisEmpty() { 
-        if isTableViewEmpty() {
-        
-        let imageError = UIImageView(frame: CGRect(x: 50, y: 100, width:
-                                                    self.view.frame.width - 100, height: 200))
-        imageError.image = UIImage(systemName: "clear")
-        imageError.tintColor = UIColor(red: 69/255, green: 230/255, blue: 72/255, alpha: 1)
-        self.view.addSubview(imageError)
-        let labelMsg = UILabel(frame: CGRect(x: imageError.frame.minX, y:
-                                                imageError.frame.maxY + 15, width: imageError.frame.width, height:
-                                                30))
-        labelMsg.text =
-        "Add new item"
-        labelMsg.textAlignment = .center
-        self.view.addSubview(labelMsg)
-        
-    }
-        
-    }
+   
     
     private func initTools(){
         tableView.delegate = self
@@ -95,7 +75,15 @@ class ViewController: UIViewController {
 extension ViewController : UITableViewDelegate , UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count
+        if items.isEmpty {
+            emptyView.isHidden = false
+            tableView.isHidden = true
+            return 0
+        }else {
+            emptyView.isHidden = true
+            tableView.isHidden = false
+            return items.count
+        }
     }
     
     
@@ -119,7 +107,6 @@ extension ViewController : UITableViewDelegate , UITableViewDataSource {
             tableView.deleteRows(at: [indexPath], with: .automatic)
             self.saveItemsToUserDefaults()
             completion(true)
-            self.checkisEmpty()
         }
         deleteAction.image = UIImage(systemName: "trash")
         deleteAction.backgroundColor = .systemRed
