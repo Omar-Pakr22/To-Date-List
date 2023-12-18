@@ -8,7 +8,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-    var items = [String]()
+    var items = [TodoItem]()
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var emptyView: UIView!
     
@@ -20,7 +20,7 @@ class ViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         if let savedItems = UserDefaults.standard.stringArray(forKey: "todoItems") {
-            items = savedItems
+            items = savedItems.map { TodoItem(title: $0) }
         }
     }
     @IBAction func AddButton(_ sender: UIBarButtonItem) {
@@ -29,10 +29,13 @@ class ViewController: UIViewController {
         let cancel = UIAlertAction(title: "Cancel", style: .default) { (cancel) in
         }
         let save = UIAlertAction(title: "Save", style: .default) { (save) in
-            self.items.append(textField.text!)
-            self.saveItemsToUserDefaults()
-            self.tableView.reloadData()
-        }
+                   if let newItemTitle = textField.text, !newItemTitle.isEmpty {
+                       let newItem = TodoItem(title: newItemTitle)
+                       self.items.append(newItem)
+                       self.saveItemsToUserDefaults()
+                       self.tableView.reloadData()
+                   }
+               }
         alert.addTextField { (text) in
             textField = text
             textField.placeholder = "Add New item"
@@ -42,6 +45,7 @@ class ViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     private func saveItemsToUserDefaults() {
+        let itemTitles = items.map { $0.title }
         UserDefaults.standard.set(items, forKey: "todoItems")
     }
 }
@@ -61,9 +65,13 @@ extension ViewController : UITableViewDelegate , UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "toDoListCell", for: indexPath) as! CustomTableViewCell
-        cell.toDoLabel.text = items[indexPath.row]
+        cell.toDoLabel.text = items[indexPath.row].title
+        
         return cell
     }
+    
+    
+    
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let deleteAction = UIContextualAction(style: .destructive, title: nil) {  _,_,completion in
@@ -74,12 +82,41 @@ extension ViewController : UITableViewDelegate , UITableViewDataSource {
         }
         deleteAction.image = UIImage(systemName: "trash")
         deleteAction.backgroundColor = .systemRed
-        let congig = UISwipeActionsConfiguration(actions: [deleteAction])
+        
+        let editAction = UIContextualAction(style: .normal, title: nil) { _, _, completion in
+            
+            var textField = UITextField()
+            let alert = UIAlertController(title: "Edit item", message: "", preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "Cancel", style: .default) { (cancel) in
+            }
+            let save = UIAlertAction(title: "Save", style: .default) { _ in
+                    if let newText = textField.text, !newText.isEmpty {
+                        print("New Text: \(newText)")
+                        self.items[indexPath.row].title = newText
+                        self.saveItemsToUserDefaults()
+                        self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                    }
+                }
+                alert.addTextField { (text) in
+                    text.text = self.items[indexPath.row].title
+                }
+            alert.addAction(cancel)
+            alert.addAction(save)
+            self.present(alert, animated: true, completion: nil)
+        completion(true)
+                }
+        
+        editAction.image = UIImage(systemName: "pencil")
+        editAction.backgroundColor = UIColor(red: 0, green: 122/255, blue: 1, alpha: 1)
+        
+        
+        let congig = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
         return congig
     }
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let sendActin = UIContextualAction(style: .destructive, title: nil) { _, _, completion in
             print("Send a message to \(self.items[indexPath.row])")
+            
             completion(true)
         }
         sendActin.image = UIImage(systemName: "envelope")

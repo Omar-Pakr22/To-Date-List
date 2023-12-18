@@ -13,6 +13,7 @@
 		FD4222CA2B251B3700C845D1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD4222C82B251B3700C845D1 /* Main.storyboard */; };
 		FD4222CC2B251B3A00C845D1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD4222CB2B251B3A00C845D1 /* Assets.xcassets */; };
 		FD4222CF2B251B3A00C845D1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD4222CD2B251B3A00C845D1 /* LaunchScreen.storyboard */; };
+		FD6A799B2B301CD300784316 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6A799A2B301CD300784316 /* TodoItem.swift */; };
 		FD8F54CF2B28623400338D51 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8F54CE2B28623400338D51 /* CustomTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +26,7 @@
 		FD4222CB2B251B3A00C845D1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FD4222CE2B251B3A00C845D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FD4222D02B251B3A00C845D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FD6A799A2B301CD300784316 /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
 		FD8F54CE2B28623400338D51 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -61,6 +63,7 @@
 				FD4222C22B251B3700C845D1 /* AppDelegate.swift */,
 				FD4222C42B251B3700C845D1 /* SceneDelegate.swift */,
 				FD4222C62B251B3700C845D1 /* ViewController.swift */,
+				FD6A799A2B301CD300784316 /* TodoItem.swift */,
 				FD4222C82B251B3700C845D1 /* Main.storyboard */,
 				FD4222CB2B251B3A00C845D1 /* Assets.xcassets */,
 				FD4222CD2B251B3A00C845D1 /* LaunchScreen.storyboard */,
@@ -141,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD6A799B2B301CD300784316 /* TodoItem.swift in Sources */,
 				FD4222C72B251B3700C845D1 /* ViewController.swift in Sources */,
 				FD4222C32B251B3700C845D1 /* AppDelegate.swift in Sources */,
 				FD8F54CF2B28623400338D51 /* CustomTableViewCell.swift in Sources */,
