@@ -15,13 +15,12 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initTools()
+        getAndSaveData()
     }
     private func initTools(){
         tableView.delegate = self
         tableView.dataSource = self
-        if let savedItems = UserDefaults.standard.stringArray(forKey: "todoItems") {
-            items = savedItems.map { TodoItem(title: $0) }
-        }
+       
     }
     @IBAction func AddButton(_ sender: UIBarButtonItem) {
         var textField = UITextField()
@@ -29,13 +28,13 @@ class ViewController: UIViewController {
         let cancel = UIAlertAction(title: "Cancel", style: .default) { (cancel) in
         }
         let save = UIAlertAction(title: "Save", style: .default) { (save) in
-                   if let newItemTitle = textField.text, !newItemTitle.isEmpty {
-                       let newItem = TodoItem(title: newItemTitle)
-                       self.items.append(newItem)
-                       self.saveItemsToUserDefaults()
-                       self.tableView.reloadData()
-                   }
-               }
+            if let newItemTitle = textField.text, !newItemTitle.isEmpty {
+                let newItem = TodoItem(title: newItemTitle, isCompleted: true)
+                self.items.append(newItem)
+                self.saveItemsToUserDefaults()
+                self.tableView.reloadData()
+            }
+        }
         alert.addTextField { (text) in
             textField = text
             textField.placeholder = "Add New item"
@@ -45,8 +44,22 @@ class ViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     private func saveItemsToUserDefaults() {
-        let itemTitles = items.map { $0.title }
-        UserDefaults.standard.set(items, forKey: "todoItems")
+            let encoder = JSONEncoder()
+            if let encodedData = try? encoder.encode(items) {
+              UserDefaults.standard.set(encodedData, forKey: "todoItems")
+            } else {
+              print("Error encoding items")
+            }
+        }
+    
+   private func getAndSaveData() {
+        if let savedItemsData = UserDefaults.standard.data(forKey: "todoItems") {
+            if let decodedItems = try? JSONDecoder().decode([TodoItem].self, from: savedItemsData) {
+                items = decodedItems
+            } else {
+                print("Error decoding saved items")
+            }
+        }
     }
 }
 extension ViewController : UITableViewDelegate , UITableViewDataSource {
@@ -85,26 +98,27 @@ extension ViewController : UITableViewDelegate , UITableViewDataSource {
         
         let editAction = UIContextualAction(style: .normal, title: nil) { _, _, completion in
             
-            var textField = UITextField()
+            let textField = UITextField()
             let alert = UIAlertController(title: "Edit item", message: "", preferredStyle: .alert)
             let cancel = UIAlertAction(title: "Cancel", style: .default) { (cancel) in
             }
             let save = UIAlertAction(title: "Save", style: .default) { _ in
-                    if let newText = textField.text, !newText.isEmpty {
-                        print("New Text: \(newText)")
-                        self.items[indexPath.row].title = newText
-                        self.saveItemsToUserDefaults()
-                        self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                    }
+                if let newText = textField.text, !newText.isEmpty {
+                   
+                    self.items[indexPath.row].title = newText
+                    self.saveItemsToUserDefaults()
+                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                    print("New Text: \(newText)")
                 }
-                alert.addTextField { (text) in
-                    text.text = self.items[indexPath.row].title
-                }
+            }
+            alert.addTextField { (text) in
+                text.text = self.items[indexPath.row].title
+            }
             alert.addAction(cancel)
             alert.addAction(save)
             self.present(alert, animated: true, completion: nil)
-        completion(true)
-                }
+            completion(true)
+        }
         
         editAction.image = UIImage(systemName: "pencil")
         editAction.backgroundColor = UIColor(red: 0, green: 122/255, blue: 1, alpha: 1)
