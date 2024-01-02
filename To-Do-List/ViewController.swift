@@ -15,53 +15,59 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initTools()
-        getAndSaveData()
+        getData()
     }
     private func initTools(){
         tableView.delegate = self
         tableView.dataSource = self
-       
+        
     }
     @IBAction func AddButton(_ sender: UIBarButtonItem) {
         var textField = UITextField()
-        let alert = UIAlertController(title: "Add New item", message: "", preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "Cancel", style: .default) { (cancel) in
+        let alert = UIAlertController(title: NSLocalizedString("Add New item", comment: ""), message: "", preferredStyle: .alert)
+        let cancel = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .default) { (cancel) in
         }
-        let save = UIAlertAction(title: "Save", style: .default) { (save) in
+        let save = UIAlertAction(title: NSLocalizedString("Save", comment: ""), style: .default) { (save) in
             if let newItemTitle = textField.text, !newItemTitle.isEmpty {
                 let newItem = TodoItem(title: newItemTitle, isCompleted: true)
                 self.items.append(newItem)
-                self.saveItemsToUserDefaults()
+                self.saveItemsToUserDefaults(toDoItem: self.items, forKey: "todoItems")
                 self.tableView.reloadData()
             }
         }
         alert.addTextField { (text) in
             textField = text
-            textField.placeholder = "Add New item"
+            textField.placeholder = NSLocalizedString("Add New item", comment: "")
         }
         alert.addAction(cancel)
         alert.addAction(save)
         self.present(alert, animated: true, completion: nil)
     }
-    private func saveItemsToUserDefaults() {
-            let encoder = JSONEncoder()
-            if let encodedData = try? encoder.encode(items) {
-              UserDefaults.standard.set(encodedData, forKey: "todoItems")
-            } else {
-              print("Error encoding items")
-            }
-        }
+    private func saveItemsToUserDefaults(toDoItem:[TodoItem], forKey : String, indexPath : Int = 0) {
     
-   private func getAndSaveData() {
-        if let savedItemsData = UserDefaults.standard.data(forKey: "todoItems") {
-            if let decodedItems = try? JSONDecoder().decode([TodoItem].self, from: savedItemsData) {
-                items = decodedItems
-            } else {
+        do {
+            let encoder = JSONEncoder()
+            let encodedData = try encoder.encode(toDoItem)
+            UserDefaults.standard.set(encodedData, forKey: forKey)
+        } catch {
+            print("Error encoding items")
+        }
+    }
+    
+    private func getData() {
+        if let savedItemsData = UserDefaults.standard.data(forKey: "todoItems")  {
+            do {
+                let decodedItems = try JSONDecoder().decode([TodoItem].self, from: savedItemsData)
+              
+                self.items.append(contentsOf: decodedItems)
+                
+            } catch {
                 print("Error decoding saved items")
             }
         }
     }
 }
+
 extension ViewController : UITableViewDelegate , UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -90,7 +96,7 @@ extension ViewController : UITableViewDelegate , UITableViewDataSource {
         let deleteAction = UIContextualAction(style: .destructive, title: nil) {  _,_,completion in
             self.items.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
-            self.saveItemsToUserDefaults()
+            self.saveItemsToUserDefaults(toDoItem: self.items, forKey: "forKey")
             completion(true)
         }
         deleteAction.image = UIImage(systemName: "trash")
@@ -99,14 +105,14 @@ extension ViewController : UITableViewDelegate , UITableViewDataSource {
         let editAction = UIContextualAction(style: .normal, title: nil) { _, _, completion in
             
             let textField = UITextField()
-            let alert = UIAlertController(title: "Edit item", message: "", preferredStyle: .alert)
-            let cancel = UIAlertAction(title: "Cancel", style: .default) { (cancel) in
+            let alert = UIAlertController(title: NSLocalizedString("Edit item", comment: ""), message: "", preferredStyle: .alert)
+            let cancel = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .default) { (cancel) in
             }
-            let save = UIAlertAction(title: "Save", style: .default) { _ in
+            let save = UIAlertAction(title: NSLocalizedString("Save", comment: ""), style: .default) { _ in
                 if let newText = textField.text, !newText.isEmpty {
                    
                     self.items[indexPath.row].title = newText
-                    self.saveItemsToUserDefaults()
+                    self.saveItemsToUserDefaults(toDoItem: self.items, forKey: "forKey", indexPath: indexPath.row)
                     self.tableView.reloadRows(at: [indexPath], with: .automatic)
                     print("New Text: \(newText)")
                 }
@@ -143,3 +149,13 @@ extension ViewController : UITableViewDelegate , UITableViewDataSource {
     }
 }
 
+//extension String {
+//    func localized() -> String {
+//        return NSLocalizedString(self,
+//                                 tableName: "Localizable",
+//                                 bundle: .main,
+//                                 value: self,
+//                                 comment: self
+//        )
+//    }
+//}
